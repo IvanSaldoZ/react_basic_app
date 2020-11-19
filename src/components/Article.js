@@ -9,12 +9,16 @@ class Article extends PureComponent {
 
         //Состояние компонента
         this.state = {
+/*
             isOpen: props.defaultOpen,  //Определяем переменную открытия или закрытия новости,
                 //по умолчанию передаем через props состояние компонента
             //Последнее состояние открытой статьи
             lastOpenState: null,
+*/
+            //Функция обратного вызова для сворачивания всех остальных статей
+            buttonClick: null,
             //Количество раз щелкнуто по заголовку
-            count: 0
+            count: 0,
         }
 
     }
@@ -23,6 +27,7 @@ class Article extends PureComponent {
     //Без этого дом просто перестроится, а так снова меняем индекс
     //Произвел рефакторинг, потому что componentWillRecieveProps больше не является безопасным
     //Подробнее: https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html#initializing-state
+/*
     static getDerivedStateFromProps(props, state) {
         if (props.defaultOpen !== state.lastOpenState) {
             return {
@@ -33,6 +38,7 @@ class Article extends PureComponent {
         // Return null to indicate no change to state.
         return null;
     }
+*/
 
     //Нужно ли перестраивать компонент? Сравниваем свойства и определяем
     //ИЛИ ПРОСТО ИСПОЛЬЗУЕМ PURECOMPONENT, где реализовано отслеживание проверка всех свойств и React будет обновлять
@@ -49,12 +55,12 @@ class Article extends PureComponent {
     //Метод для рендеринга компонента на странице (построение виртуального DOM)
     //Логику здесь писать не надо
     render() {
-        const {article} = this.props  // Помещаем переданные свойства в переменную-объект article
+        //Читаем весь массив входных переменных, включая функцию
+        const {article, isOpen, onButtonClick} = this.props
         //Ширина
         const style = {width: '50%'}
         //если состояние = true, то показываем текст
-        const body = this.state.isOpen && <section className="card-text">{article.text}</section>
-        console.log('------', this.props)
+        const body = isOpen && <section className="card-text">{article.text}</section>
         //Рендерим компонент
         return (
             <div className="card mx-auto" style={style}>
@@ -62,8 +68,8 @@ class Article extends PureComponent {
                     <h2>
                         {article.title}
                         clicked <button onClick={this.incrementCounter}>{this.state.count}</button>
-                        <button className="btn btn-secondary btn-sm float-right" onClick={this.handleClick}>
-                            {this.state.isOpen ? 'close': 'open'}
+                        <button className="btn btn-secondary btn-sm float-right" onClick={onButtonClick}>
+                            {isOpen ? 'close': 'open'}
                         </button>
 
                     </h2>
@@ -80,13 +86,6 @@ class Article extends PureComponent {
     incrementCounter = () => {
         this.setState({
             count: this.state.count + 1
-        })
-    }
-
-    //Обработка нажатия кнопки через синтаксический сахар (это как метод класса)
-    handleClick = () => {
-        this.setState({
-            isOpen: !this.state.isOpen
         })
     }
 

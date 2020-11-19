@@ -1,7 +1,7 @@
 //Импортируем сам React
 import React, {PureComponent} from 'react'
 //Подгружаем компонент ArticleList
-import ArticleList from "./ArticleList/ArticleList";
+import ArticleList from "./ArticleList";
 //Импортируем список статей
 import articles from "../fixtures"
 //Подключаем Bootrap
